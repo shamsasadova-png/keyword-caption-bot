@@ -1,0 +1,167 @@
+{
+  "name": "keyword-caption-bot",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -496,
+        -144
+      ],
+      "id": "1ff26456-f653-4fae-8eac-932b9c461dbb",
+      "name": "Telegram Trigger",
+      "webhookId": "5fa5077f-85ec-4a83-be5b-1ac32df5c564",
+      "credentials": {
+        "telegramApi": {
+          "id": "2ZAEnYPsxowtkzbP",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "claude-haiku-4-5-20251001",
+          "mode": "list",
+          "cachedResultName": "claude-haiku-4-5-20251001"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=İstifadəçi bu sözü yazıb: \"{{ $json.message.text }}\"\n\nBu sözlə bağlı Instagram paylaşımı hazırlamaq istəyirəm.\n\nMənə YALNIZ aşağıdakı formatda cavab ver, başqa heç nə yazma:\n\nKEYWORD: [bu sözün ingiliscə qarşılığı, tək söz]\nCAPTION: [İNGİLİSCƏ, maksimum 15 söz, yaradıcı bir cümlə]"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        32
+      ],
+      "id": "28fab764-6aa2-42a4-bffc-d5e2e8025a53",
+      "name": "Message a model",
+      "credentials": {
+        "anthropicApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "file": "={{ $('HTTP Request').item.json.urls.regular }}",
+        "additionalFields": {
+          "caption": "={{ $('Message a model').item.json.content[0].text.match(/CAPTION:\\s*(.+)/)[1].trim() }}"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        48
+      ],
+      "id": "1180c175-a2ec-41ae-b94b-a6624cc67546",
+      "name": "Send a photo message",
+      "webhookId": "0e33e3a8-4585-46cc-9c10-14224cc2ad35",
+      "credentials": {
+        "telegramApi": {
+          "id": "2ZAEnYPsxowtkzbP",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.unsplash.com/photos/random",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.content[0].text.match(/KEYWORD:\\s*(.+)/)[1].trim() }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Client-ID -VWYS8vwbGrsM_FGbszMCbowzsm5J0Z-k1ZpPcg5yiI"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        96,
+        -160
+      ],
+      "id": "02e3f5fe-8e58-4bb6-8f80-c3f18dc2baa7",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8b240d6f-1a00-4836-9713-22e0bf8a98ea",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "8f8e2803a19a22d5fdf7b6c6601c4e9c0ada27c8ad84f071b58ff2057fe4ffa6"
+  },
+  "nodeGroups": [],
+  "id": "gQHaIuh6o9g0paQx",
+  "tags": []
+}
