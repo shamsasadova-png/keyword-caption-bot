@@ -13,3 +13,7 @@ image and an Instagram-ready caption.
 - [n8n](https://n8n.io) — workflow automation
 - [Unsplash API](https://unsplash.com/developers) — images
 - [Claude API](https://www.anthropic.com) — caption generation
+
+
+https://github.com/user-attachments/assets/5bca5a47-85cf-40fa-9757-c966e286edf6
+
