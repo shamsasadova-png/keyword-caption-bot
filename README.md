@@ -2,7 +2,9 @@
 
 A Telegram bot that takes an English keyword and returns a matching image and an Instagram-ready caption — a fully automated pipeline for social media content.
 
-🎥 **Demo:** https://github.com/user-attachments/assets/5bca5a47-85cf-40fa-9757-c966e286edf6
+   🎥 **Demo:**
+
+   https://github.com/user-attachments/assets/5bca5a47-85cf-40fa-9757-c966e286edf6
 
 ## 🎯 The Problem
 Creating consistent, engaging content for Instagram takes time — finding the right image and writing a caption for every post adds up. This bot removes that manual work: send one word, get a ready-to-post image + caption in seconds.
